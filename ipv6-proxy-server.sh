@@ -116,8 +116,8 @@ because Linux has only 65536 potentially ports";
 fi;
 
 if [ -z $subnet_mask ]; then 
-  blocks_count=$((($subnet / 16) - 1));
-  subnet_mask="$(ip -6 addr|awk '{print $2}'|grep -m1 -oP '^(?!fe80)([0-9a-fA-F]{1,4}:){'$blocks_count'}[0-9a-fA-F]{1,4}'|cut -d '/' -f1)";
+  blocks_count=$(($subnet / 16));
+  subnet_mask="$(ip -6 addr|awk '{print $2}'|grep -m1 -oP '^(?!fe80)([0-9a-fA-F]{1,4}:){'$blocks_count'}[0-9a-fA-F]{1,2}'|cut -d '/' -f1)";
 fi;
 
 if cat /sys/class/net/$interface_name/operstate 2>&1 | grep -q "No such file or directory"; then
@@ -347,7 +347,6 @@ function create_startup_script(){
 
   # Generate random hex symbol
   function rh () { echo \${array[\$RANDOM%16]}; }
-
   rnd_subnet_ip () {
     echo -n $subnet_mask;
     symbol=$subnet
