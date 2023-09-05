@@ -103,10 +103,6 @@ if [ $proxies_type != "http" ] && [ $proxies_type != "socks5" ] ; then
   usage;
 fi;
 
-if [ $(expr $subnet % 16) != 0 ]; then
-  echo_log_err "Error: invalid value of '-s' (subnet) parameter";
-  usage;
-fi;
 
 if [ $rotating_interval -lt 0 ] || [ $rotating_interval -gt 59 ]; then
   echo_log_err "Error: invalid value of '-r' (proxy external ip rotating interval) parameter";
@@ -353,6 +349,7 @@ function create_startup_script(){
   function rh () { echo \${array[\$RANDOM%16]}; }
 
   rnd_subnet_ip () {
+    subnet_mask=${subnet_mask::-2}
     echo -n $subnet_mask;
     symbol=$subnet
     while (( \$symbol < 128)); do
