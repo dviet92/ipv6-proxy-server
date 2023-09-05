@@ -349,7 +349,6 @@ function create_startup_script(){
   function rh () { echo \${array[\$RANDOM%16]}; }
 
   rnd_subnet_ip () {
-    subnet_mask=${subnet_mask::-2}
     echo -n $subnet_mask;
     symbol=$subnet
     while (( \$symbol < 128)); do
